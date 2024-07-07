@@ -11,16 +11,24 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   List todolist = [];
-  String task = "";
+  final task = TextEditingController();
   void addtodo() {
-    setState(() {
-      todolist.add(task);
-      task = "";
-    });
+    setState(
+      () {
+        todolist.add(task.value.text);
+        task.clear();
+      },
+    );
   }
 
   void edittodo() {}
-  void deltodo() {}
+  void deltodo(index) {
+    setState(
+      () {
+        todolist.removeAt(index);
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,9 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         labelText: "สิ่งที่ต้องทำ",
                       ),
                       keyboardType: TextInputType.text,
-                      onChanged: (value) {
-                        task = value;
-                      },
+                      controller: task,
                     ),
                     const SizedBox(
                       height: 20,
@@ -62,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return ListTile(
                       title: Text(todolist[index]),
                       trailing: IconButton(
-                        onPressed: deltodo,
+                        onPressed: () => deltodo(index),
                         icon: Icon(Icons.delete),
                       ),
                     );
